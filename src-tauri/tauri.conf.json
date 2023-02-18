@@ -1,12 +1,12 @@
 {
   "package": {
-    "productName": "WeRead",
+    "productName": "Yacd",
     "version": "1.0.0"
   },
   "tauri": {
     "windows": [
       {
-        "url": "https://weread.qq.com/",
+        "url": "http://yacd.metacubex.one/",
         "transparent": true,
         "fullscreen": false,
         "width": 1200,

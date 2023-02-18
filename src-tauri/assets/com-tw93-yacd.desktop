@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Categories=Office
+Exec=com-tw93-yacd
+Icon=com-tw93-yacd
+Name=com-tw93-yacd
+Name[zh_CN]=Yacd
+StartupNotify=true
+Terminal=false
+Type=Application

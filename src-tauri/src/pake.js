@@ -32,7 +32,16 @@ const ctrlKeyShortcuts = {
 };
 
 window.addEventListener("DOMContentLoaded", (_event) => {
+  const link = document.createElement("link");
+  link.rel = "stylesheet";
+  link.type = "text/css";
+  link.href = "https://twemoji.maxcdn.com/v/latest/twemoji.min.js";
+  document.head.append(link);
+
   const style = document.createElement("style");
+
+  twemoji.parse(document.body)
+
   style.innerHTML = `
     #page #footer-wrapper,
     .drawing-board .toolbar .toolbar-action,
@@ -373,17 +382,17 @@ function zoomOut() {
 
 
 function pakeToast(msg) {
-	const m = document.createElement('div');
-	m.innerHTML = msg;
-	m.style.cssText = "max-width:60%;min-width: 180px;padding:0 8px;height: 36px;color: rgb(255, 255, 255);line-height: 36px;text-align: center;border-radius: 4px;position: fixed;bottom:16px;right: 16px;transform: translate(-50%, -50%);z-index: 999999;background: rgba(0, 0, 0,.9);font-size: 14px;";
-	document.body.appendChild(m);
-	setTimeout(function() {
+  const m = document.createElement('div');
+  m.innerHTML = msg;
+  m.style.cssText = "max-width:60%;min-width: 180px;padding:0 8px;height: 36px;color: rgb(255, 255, 255);line-height: 36px;text-align: center;border-radius: 4px;position: fixed;bottom:16px;right: 16px;transform: translate(-50%, -50%);z-index: 999999;background: rgba(0, 0, 0,.9);font-size: 14px;";
+  document.body.appendChild(m);
+  setTimeout(function () {
     const d = 0.5;
-		m.style.transition = 'transform ' + d + 's ease-in, opacity ' + d + 's ease-in';
-		m.style.opacity = '0';
-		setTimeout(function() {
-			document.body.removeChild(m)
-		}, d * 1000);
-	}, 2500);
+    m.style.transition = 'transform ' + d + 's ease-in, opacity ' + d + 's ease-in';
+    m.style.opacity = '0';
+    setTimeout(function () {
+      document.body.removeChild(m)
+    }, d * 1000);
+  }, 2500);
 }
 
