@@ -2,8 +2,8 @@
   "tauri": {
     "bundle": {
       "icon": [
-        "png/yacd_256.ico",
-        "png/yacd_32.ico"
+        "png/weread_256.ico",
+        "png/weread_32.ico"
       ],
       "identifier": "com.tw93.weread",
       "active": true,
@@ -11,15 +11,21 @@
       "copyright": "",
       "externalBin": [],
       "longDescription": "",
-      "resources": ["png/yacd_32.ico"],
+      "resources": [
+        "png/weread_32.ico"
+      ],
       "shortDescription": "",
-      "targets": ["msi"],
+      "targets": [
+        "msi"
+      ],
       "windows": {
         "certificateThumbprint": null,
         "digestAlgorithm": "sha256",
         "timestampUrl": "",
         "wix": {
-          "language": ["zh-CN"],
+          "language": [
+            "zh-CN"
+          ],
           "template": "assets/main.wxs"
         }
       }

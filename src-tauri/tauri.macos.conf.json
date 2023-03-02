@@ -2,7 +2,7 @@
   "tauri": {
     "bundle": {
       "icon": [
-        "icons/yacd.icns"
+        "icons/weread.icns"
       ],
       "identifier": "com.tw93.weread",
       "active": true,
@@ -19,7 +19,9 @@
       },
       "resources": [],
       "shortDescription": "",
-      "targets": ["dmg"]
+      "targets": [
+        "dmg"
+      ]
     }
   }
 }
