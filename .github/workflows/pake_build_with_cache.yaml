@@ -1,41 +1,32 @@
 name: Build App with Cache
 on:
-  workflow_dispatch:
-    inputs:
-      version:
-        description: "tag version"
-        required: true
-        default: "V0.0.1"
-      is_pre_release:
-        description: "pre-release or release, if true, is pre-release"
-        required: true
-        type: boolean
-        default: true
-
+  workflow_dispatch: 
+  push:
 
 jobs:
-  build:
+  Build:
+    permissions: write-all
     name: build
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        build: [linux, windows, macos]
+        build: [windows]
         include:
-        - build: linux
-          os: ubuntu-20.04
-          rust: stable
-          target: x86_64-unknown-linux-musl
+          # - build: linux
+          #   os: ubuntu-20.04
+          #   rust: stable
+          #   target: x86_64-unknown-linux-musl
           # archive-name: target-linux.tar.gz
-        - build: windows
-          os: windows-latest
-          rust: stable-x86_64-msvc
-          target: x86_64-pc-windows-msvc
-          # archive-name: target-windows.tar.gz
-        - build: macos
-          os: macos-latest
-          rust: stable
-          target: x86_64-apple-darwin
-          # archive-name: target-macos.tar.gz
+          - build: windows
+            os: windows-latest
+            rust: stable-x86_64-msvc
+            target: x86_64-pc-windows-msvc
+            # archive-name: target-windows.tar.gz
+          # - build: macos
+          #   os: macos-latest
+          #   rust: stable
+          #   target: x86_64-apple-darwin
+            # archive-name: target-macos.tar.gz
       fail-fast: false
 
     steps:
@@ -88,15 +79,11 @@ jobs:
       run: |
         npm run build:all-windows
 
-    - name: Upload files
-      # arg info: https://github.com/ncipollo/release-action#release-action
-      uses: ncipollo/release-action@v1
+    - uses: actions/upload-artifact@v3
+      if: ${{  success() }}
       with:
-        allowUpdates: true
-        prerelease: ${{ inputs.is_pre_release }}
-        artifacts: "output/*/*.*"
-        tag: ${{ inputs.version }}
-        token: ${{ secrets.GITHUB_TOKEN }}
+        name: artifact
+        path: output/
 
     - name: rust cache store
       uses: actions/cache/save@v3
@@ -109,3 +96,42 @@ jobs:
           ~/.cargo/git/db/
           src-tauri/target/
         key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+
+  Upload:
+    permissions: write-all
+    needs: [Build]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v3
+        with:
+          name: artifact
+          path: output/
+
+      - name: Display structure of downloaded files
+        run: ls -R
+        working-directory: output
+
+      - name: Delete current release assets
+        uses: andreaswilli/delete-release-assets-action@v2.0.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          tag: latest
+          deleteOnlyFromDrafts: false
+
+      - name: Tag Repo
+        uses: richardsimko/update-tag@v1.0.6
+        with:
+          tag_name: latest
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload
+        uses: softprops/action-gh-release@v1
+        if: ${{  success() }}
+        with:
+          tag: ${{ github.ref_name }}
+          tag_name: latest
+          files: output/*/*
+          prerelease: false
+          generate_release_notes: true
+
